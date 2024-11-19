@@ -65,8 +65,6 @@ def main(
     max_val_total: int,
     clean: bool,
 ):
-    setup_nltk()
-
     if train_path is None:
         train_path = os.path.join(os.path.dirname(metadata), 'train.list')
     if val_path is None:
@@ -162,4 +160,5 @@ def main(
 
 
 if __name__ == "__main__":
+    setup_nltk()
     main()
