@@ -4,7 +4,7 @@ from enum import Enum
 
 import six
 
-_DEF_PUNCS = ';:,.!?¡¿—…"«»“”'
+_DEF_PUNCS = ';:,.!?\u00A1\u00BF\u2014\u2026\u201C\u00AB\u00BB\u201D\u201C'
 
 _PUNC_IDX = collections.namedtuple("_punc_index", ["punc", "position"])
 
