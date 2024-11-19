@@ -7,7 +7,7 @@ import torchaudio
 import re
 
 def split_sentence(text, min_len=10, language_str='EN'):
-    if language_str in ['EN', 'FR', 'ES', 'SP']:
+    if language_str in ['EN', 'FR', 'ES', 'SP', 'IT']:
         sentences = split_sentences_latin(text, min_len=min_len)
     else:
         sentences = split_sentences_zh(text, min_len=min_len)
@@ -167,8 +167,10 @@ if __name__ == '__main__':
     en_text = "I didn’t know what to do. I said please kill her because it would be better than being kidnapped,” Ben, whose surname CNN is not using for security concerns, said on Wednesday. “It’s a nightmare. I said ‘please kill her, don’t take her there.’"
     sp_text = "¡Claro! ¿En qué tema te gustaría que te hable en español? Puedo proporcionarte información o conversar contigo sobre una amplia variedad de temas, desde cultura y comida hasta viajes y tecnología. ¿Tienes alguna preferencia en particular?"
     fr_text = "Bien sûr ! En quelle matière voudriez-vous que je vous parle en français ? Je peux vous fournir des informations ou discuter avec vous sur une grande variété de sujets, que ce soit la culture, la nourriture, les voyages ou la technologie. Avez-vous une préférence particulière ?"
+    it_text = "Certo che si può! Di quale argomento volete che vi parli in italiano? Posso fornirvi informazioni o discutere con voi di un'ampia gamma di argomenti, dalla cultura al cibo, dai viaggi alla tecnologia. Avete una preferenza particolare?"
 
     print(split_sentence(zh_text, language_str='ZH'))
     print(split_sentence(en_text, language_str='EN'))
     print(split_sentence(sp_text, language_str='SP'))
     print(split_sentence(fr_text, language_str='FR'))
+    print(split_sentence(it_text, language_str='FR'))

@@ -9,6 +9,7 @@ import numpy as np
 import torch.nn as nn
 from tqdm import tqdm
 import torch
+import io
 
 from . import utils
 from . import commons
@@ -133,3 +134,4 @@ class TTS(nn.Module):
                 soundfile.write(output_path, audio, self.hps.data.sampling_rate, format=format)
             else:
                 soundfile.write(output_path, audio, self.hps.data.sampling_rate)
+
