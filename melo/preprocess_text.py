@@ -1,6 +1,3 @@
-import nltk
-import ssl
-import os
 import json
 from collections import defaultdict
 from random import shuffle
@@ -12,13 +9,6 @@ from text.cleaner import clean_text_bert
 import os
 import torch
 from text.symbols import symbols, num_languages, num_tones
-
-def is_colab():
-    try:
-        import google.colab
-        return True
-    except:
-        return False
 
 import nltk
 import ssl
@@ -34,32 +24,11 @@ from text.cleaner import clean_text_bert
 import torch
 from text.symbols import symbols, num_languages, num_tones
 
-def is_colab():
-    try:
-        import google.colab
-        return True
-    except:
-        return False
 
-def setup_nltk():
-    if is_colab():
-        # Set NLTK data path to a writable directory in Colab
-        nltk_data_dir = '/content/nltk_data'
-        os.makedirs(nltk_data_dir, exist_ok=True)
-        nltk.data.path.append(nltk_data_dir)
-
-        try:
-            _create_unverified_https_context = ssl._create_unverified_context
-        except AttributeError:
-            pass
-        else:
-            ssl._create_default_https_context = _create_unverified_https_context
-        
-        nltk.download('averaged_perceptron_tagger', download_dir=nltk_data_dir)
-        nltk.download('cmudict', download_dir=nltk_data_dir)
-    else:
-        nltk.download('averaged_perceptron_tagger')
-        nltk.download('cmudict')
+def setup_nltk():        
+    nltk.download('averaged_perceptron_tagger')
+    nltk.download('averaged_perceptron_tagger_eng')
+    nltk.download('cmudict')
 
 @click.command()
 @click.option(
