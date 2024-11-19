@@ -2,13 +2,26 @@
 from .cleaner import italian_cleaners
 from .gruut_wrapper import Gruut
 
+# Italian vowels using Unicode escape sequences
+italian_vowels = set('aeiou' + 
+                         '\u00E0'  # а
+                         '\u00E8'  # и
+                         '\u00E9'  # й
+                         '\u00EC'  # м
+                         '\u00ED'  # н
+                         '\u00EE'  # о
+                         '\u00F2'  # т
+                         '\u00F3'  # у
+                         '\u00F9'  # щ
+                         '\u00FA'  # ъ
+                        )
 def remove_consecutive_consonants(input_str):
     result = []
     prev_char = ''
     count = 0
 
     for char in input_str:
-        if char == prev_char and char not in 'aeiouаиймнотущъ':
+        if char == prev_char and char not in italian_vowels:
             count += 1
         else:
             if count < 3:
