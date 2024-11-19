@@ -13,23 +13,26 @@ import os
 import torch
 from text.symbols import symbols, num_languages, num_tones
 
-@click.command()
-@click.option(
-    "--metadata",
-    default="data/example/metadata.list",
-    type=click.Path(exists=True, file_okay=True, dir_okay=False),
-)
-@click.option("--cleaned-path", default=None)
-@click.option("--train-path", default=None)
-@click.option("--val-path", default=None)
-@click.option(
-    "--config_path",
-    default="configs/config.json",
-    type=click.Path(exists=True, file_okay=True, dir_okay=False),
-)
-@click.option("--val-per-spk", default=4)
-@click.option("--max-val-total", default=8)
-@click.option("--clean/--no-clean", default=True)
+def is_colab():
+    try:
+        import google.colab
+        return True
+    except:
+        return False
+
+import nltk
+import ssl
+import os
+import json
+from collections import defaultdict
+from random import shuffle
+from typing import Optional
+
+from tqdm import tqdm
+import click
+from text.cleaner import clean_text_bert
+import torch
+from text.symbols import symbols, num_languages, num_tones
 
 def is_colab():
     try:
@@ -54,6 +57,27 @@ def setup_nltk():
         
         nltk.download('averaged_perceptron_tagger', download_dir=nltk_data_dir)
         nltk.download('cmudict', download_dir=nltk_data_dir)
+    else:
+        nltk.download('averaged_perceptron_tagger')
+        nltk.download('cmudict')
+
+@click.command()
+@click.option(
+    "--metadata",
+    default="data/example/metadata.list",
+    type=click.Path(exists=True, file_okay=True, dir_okay=False),
+)
+@click.option("--cleaned-path", default=None)
+@click.option("--train-path", default=None)
+@click.option("--val-path", default=None)
+@click.option(
+    "--config_path",
+    default="configs/config.json",
+    type=click.Path(exists=True, file_okay=True, dir_okay=False),
+)
+@click.option("--val-per-spk", default=4)
+@click.option("--max-val-total", default=8)
+@click.option("--clean/--no-clean", default=True)
 
 def main(
     metadata: str,
@@ -65,6 +89,8 @@ def main(
     max_val_total: int,
     clean: bool,
 ):
+    setup_nltk()
+
     if train_path is None:
         train_path = os.path.join(os.path.dirname(metadata), 'train.list')
     if val_path is None:
@@ -160,5 +186,4 @@ def main(
 
 
 if __name__ == "__main__":
-    setup_nltk()
     main()
