@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from .cleaner import italian_cleaners
 from .gruut_wrapper import Gruut
 
