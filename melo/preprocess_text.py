@@ -1,3 +1,6 @@
+import nltk
+import ssl
+import os
 import json
 from collections import defaultdict
 from random import shuffle
@@ -27,6 +30,31 @@ from text.symbols import symbols, num_languages, num_tones
 @click.option("--val-per-spk", default=4)
 @click.option("--max-val-total", default=8)
 @click.option("--clean/--no-clean", default=True)
+
+def is_colab():
+    try:
+        import google.colab
+        return True
+    except:
+        return False
+
+def setup_nltk():
+    if is_colab():
+        # Set NLTK data path to a writable directory in Colab
+        nltk_data_dir = '/content/nltk_data'
+        os.makedirs(nltk_data_dir, exist_ok=True)
+        nltk.data.path.append(nltk_data_dir)
+
+        try:
+            _create_unverified_https_context = ssl._create_unverified_context
+        except AttributeError:
+            pass
+        else:
+            ssl._create_default_https_context = _create_unverified_https_context
+        
+        nltk.download('averaged_perceptron_tagger', download_dir=nltk_data_dir)
+        nltk.download('cmudict', download_dir=nltk_data_dir)
+
 def main(
     metadata: str,
     cleaned_path: Optional[str],
@@ -37,6 +65,8 @@ def main(
     max_val_total: int,
     clean: bool,
 ):
+    setup_nltk()
+
     if train_path is None:
         train_path = os.path.join(os.path.dirname(metadata), 'train.list')
     if val_path is None:
