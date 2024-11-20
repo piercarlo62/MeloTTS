@@ -23,12 +23,13 @@ import click
 from text.cleaner import clean_text_bert
 import torch
 from text.symbols import symbols, num_languages, num_tones
+# Import the detect_file_encoding function from detect_encoding.py
+from detect_encoding import detect_file_encoding
 
 
 def setup_nltk():        
-    nltk.download('averaged_perceptron_tagger')
     nltk.download('averaged_perceptron_tagger_eng')
-    nltk.download('cmudict')
+
 
 @click.command()
 @click.option(
@@ -66,13 +67,19 @@ def main(
         val_path = os.path.join(os.path.dirname(metadata), 'val.list')
     out_config_path = os.path.join(os.path.dirname(metadata), 'config.json')
 
+    # Detect the encoding of the metadata file using the imported function
+    metadata_detected_encoding = detect_file_encoding(metadata)
+    print(f"Detected encoding: {metadata_detected_encoding}")
+
     if cleaned_path is None:
         cleaned_path = metadata + ".cleaned"
 
     if clean:
         out_file = open(cleaned_path, "w", encoding="utf-8")
         new_symbols = []
-        for line in tqdm(open(metadata, encoding="utf-8").readlines()):
+
+
+        for line in tqdm(open(metadata, encoding=metadata_detected_encoding).readlines()):
             try:
                 utt, spk, language, text = line.strip().split("|")
                 norm_text, phones, tones, word2ph, bert = clean_text_bert(text, language, device='cuda:0')
@@ -111,7 +118,7 @@ def main(
     spk_id_map = {}
     current_sid = 0
 
-    with open(metadata, encoding="utf-8") as f:
+    with open(metadata, encoding=metadata_detected_encoding) as f:
         for line in f.readlines():
             utt, spk, language, text, phones, tones, word2ph = line.strip().split("|")
             spk_utt_map[spk].append(line)
